@@ -13,7 +13,11 @@ config_version=5
 config/name="race"
 run/main_scene="uid://djxrcyq64efle"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://Texture/icon.svg"
+
+[autoload]
+
+Global="*res://Code/Global.gd"
 
 [rendering]
 

@@ -1,3 +1,6 @@
-res://race1.tscn
 res://player.tscn
 res://main.tscn
+res://Code/main.tscn
+res://Code/audio_manager.tscn
+res://Code/player.tscn
+res://Code/player.gd

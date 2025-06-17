@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://djxrcyq64efle"]
 
-[ext_resource type="PackedScene" uid="uid://b7hkvfcspqtcp" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://b7hkvfcspqtcp" path="res://Code/player.tscn" id="1_mlw2d"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1bvp3"]
 
@@ -9,6 +9,7 @@ sky_material = SubResource("PanoramaSkyMaterial_1bvp3")
 
 [sub_resource type="Environment" id="Environment_7mycd"]
 sky = SubResource("Sky_lquwl")
+sky_custom_fov = 92.0
 ambient_light_source = 3
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 16.0
@@ -36,4 +37,4 @@ mesh = SubResource("PlaneMesh_0xm2m")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_h2yge")
 
-[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+[node name="Player" parent="." instance=ExtResource("1_mlw2d")]

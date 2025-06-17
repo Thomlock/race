@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
 
-const SPEED = 5.0
+const SPEED = 10.0
 const JUMP_VELOCITY = 4.5
-
+const TURN_SPEED = 0.001
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -24,5 +24,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-
-	move_and_slide()
+	var sqrtspeed = sqrt(SPEED)
+	if Input.is_action_pressed("ui_left"):
+		self.rotate_y(TURN_SPEED/sqrtspeed)
+	if Input.is_action_pressed("ui_right"):
+		#self.rotate_y(-TURN_SPEED/sqrtspeed)
+			move_and_slide()
