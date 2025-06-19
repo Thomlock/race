@@ -1,6 +1,11 @@
-res://player.tscn
-res://main.tscn
+res://Code/player.tscn
+res://Code/spring_arm_3d.gd
 res://Code/main.tscn
 res://Code/audio_manager.tscn
-res://Code/player.tscn
+res://Code/camera_3d.tscn
+res://Code/cam_goal.tscn
+res://Code/cam.tscn
 res://Code/player.gd
+res://character_body_3d.gd
+res://camera_pivot.gd
+res://Code/character_body_3d.tscn

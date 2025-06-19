@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://ch11put0e81oo"]
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_tyfr5"]
+length = 6.0
+
+[node name="cam" type="SpringArm3D"]
+shape = SubResource("SeparationRayShape3D_tyfr5")
+
+[node name="Camera3D" type="Camera3D" parent="."]

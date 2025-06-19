@@ -1,40 +1,64 @@
-[gd_scene load_steps=8 format=3 uid="uid://djxrcyq64efle"]
+[gd_scene load_steps=12 format=3 uid="uid://djxrcyq64efle"]
 
-[ext_resource type="PackedScene" uid="uid://b7hkvfcspqtcp" path="res://Code/player.tscn" id="1_mlw2d"]
+[ext_resource type="Texture2D" uid="uid://h10j17mof76k" path="res://Texture/cadrillage.jpg" id="1_sxokv"]
+[ext_resource type="Script" uid="uid://c666xdve0hyqm" path="res://character_body_3d.gd" id="2_asa22"]
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1bvp3"]
-
-[sub_resource type="Sky" id="Sky_lquwl"]
-sky_material = SubResource("PanoramaSkyMaterial_1bvp3")
-
-[sub_resource type="Environment" id="Environment_7mycd"]
-sky = SubResource("Sky_lquwl")
-sky_custom_fov = 92.0
-ambient_light_source = 3
+[sub_resource type="Environment" id="Environment_asa22"]
+ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 16.0
-tonemap_exposure = 1.86
 
 [sub_resource type="Compositor" id="Compositor_272bh"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_0xm2m"]
-size = Vector2(20, 20)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m2mlj"]
+albedo_texture = ExtResource("1_sxokv")
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h2yge"]
-data = PackedVector3Array(10, 0, 10, -10, 0, 10, 10, 0, -10, -10, 0, 10, -10, 0, -10, 10, 0, -10)
+[sub_resource type="ImageTexture" id="ImageTexture_fdhps"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asa22"]
+albedo_texture = SubResource("ImageTexture_fdhps")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0xm2m"]
+material = SubResource("StandardMaterial3D_asa22")
+size = Vector2(200, 200)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_asa22"]
+points = PackedVector3Array(-100, 0, -100, -100, 0, 100, 100, 0, -100, 100, 0, 100)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sxokv"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_m2mlj"]
 
 [node name="Main" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_7mycd")
+environment = SubResource("Environment_asa22")
 compositor = SubResource("Compositor_272bh")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+layers = 3
+material_override = SubResource("StandardMaterial3D_m2mlj")
 mesh = SubResource("PlaneMesh_0xm2m")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_h2yge")
+shape = SubResource("ConvexPolygonShape3D_asa22")
 
-[node name="Player" parent="." instance=ExtResource("1_mlw2d")]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("2_asa22")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_sxokv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_m2mlj")
+skeleton = NodePath("../..")
+
+[node name="CameraPivot" type="Node3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CharacterBody3D/CameraPivot"]
+spring_length = 3.0
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CameraPivot/SpringArm3D"]
