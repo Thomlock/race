@@ -1,9 +1,12 @@
+PathFollow3D
+RayCast3D
 MeshInstance3D
-CollisionShape3D
-CharacterBody3D
-Camera3D
-SpringArm3D
 Node3D
+CollisionShape3D
 Area3D
+Camera3D
+Path3D
+CharacterBody3D
+SpringArm3D
 WorldEnvironment
 StaticBody3D

@@ -1,13 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://ssucypuf0dy"]
+[gd_scene load_steps=7 format=3 uid="uid://ssucypuf0dy"]
 
-[ext_resource type="Script" uid="uid://c666xdve0hyqm" path="res://character_body_3d.gd" id="1_cc3x3"]
-[ext_resource type="Script" uid="uid://ckq3oxmi4ne0m" path="res://camera_pivot.gd" id="2_4bsi5"]
+[ext_resource type="Script" uid="uid://c666xdve0hyqm" path="res://Code/character_body_3d.gd" id="1_cc3x3"]
+[ext_resource type="Script" uid="uid://dypemq2goksoj" path="res://Code/camera_3d_2.gd" id="2_cc3x3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o44xo"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_pmq45"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cc3x3"]
+albedo_color = Color(1, 0, 0, 1)
 
-[node name="CharacterBody3D" type="CharacterBody3D"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_pmq45"]
+material = SubResource("StandardMaterial3D_cc3x3")
+
+[sub_resource type="Curve3D" id="Curve3D_64l7o"]
+
+[node name="player" type="CharacterBody3D"]
+floor_block_on_wall = false
 script = ExtResource("1_cc3x3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -18,11 +25,14 @@ shape = SubResource("CapsuleShape3D_o44xo")
 mesh = SubResource("CapsuleMesh_pmq45")
 skeleton = NodePath("../..")
 
-[node name="CameraPivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-script = ExtResource("2_4bsi5")
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_64l7o")
 
-[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
-spring_length = 3.0
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
 
-[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
+[node name="Camera3D2" type="Camera3D" parent="."]
+script = ExtResource("2_cc3x3")
+target_path = NodePath("../Path3D/PathFollow3D")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -2, 0)

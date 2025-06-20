@@ -5,11 +5,12 @@ const ACCELERATION = 10.0
 const DECELERATION = 8.0
 const TURN_SPEED = 2.0  # vitesse de rotation (rad/s)
 const MAX_REVERSE_SPEED = -10.0
-
 var speed = 0.0
 
+
 func _physics_process(delta):
-	# Contrôles
+	Global.player = self
+	Global.pathCam = $pathFollow3D
 	var accelerating = Input.is_action_pressed("ui_up")
 	var braking = Input.is_action_pressed("ui_down")
 	var turning_left = Input.is_action_pressed("ui_left")
