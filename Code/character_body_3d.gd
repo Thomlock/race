@@ -80,7 +80,6 @@ func _physics_process(delta: float) -> void:
 			is_boosting = true
 			boost_timer = BOOST_DURATION
 			drift_power = 0.0
-			print("🚀 Boost activé !")
 		else:
 			# Réduit la puissance si pas en train de tourner
 			drift_power = clamp(drift_power - DRIFT_DECAY * delta, 0.0, 100.0)
@@ -119,9 +118,6 @@ func _physics_process(delta: float) -> void:
 		boost_timer -= delta
 		if boost_timer <= 0.0:
 			is_boosting = false
-			print("🛑 Boost terminé.")
 
 	# Déplacement avec la physique
 	move_and_slide()
-	for i in range(get_slide_collision_count()):
-		print(get_slide_collision(i))
