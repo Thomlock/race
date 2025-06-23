@@ -1,10 +1,10 @@
-RayCast3D
+CollisionShape3D
+Area3D
 MeshInstance3D
+RayCast3D
 Timer
 PathFollow3D
 Node3D
-CollisionShape3D
-Area3D
 Camera3D
 Path3D
 CharacterBody3D

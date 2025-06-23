@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 class_name Player
 
+
 # Configuration générale
 const ACCELERATION = 10.0
 const DECELERATION = 8.0
@@ -25,8 +26,11 @@ var lateral_velocity := Vector3.ZERO
 var is_boosting = false
 var boost_timer = 0.0
 var drift_power = 0.0
+var gravity_direction = Vector3(0, -1, 0)
+var gravity_strength = 2
+var wall = null
 
-
+var wall_ride = false
 
 func _physics_process(delta: float) -> void:
 	var accelerating = Input.is_action_pressed("ui_up")
@@ -63,28 +67,27 @@ func _physics_process(delta: float) -> void:
 	var right = transform.basis.x.normalized()
 	var forward_velocity = forward * speed
 
-	# Mise à jour de la glisse latérale
 	lateral_velocity *= SLIP_FACTOR
 	var slip_amount = 0.0
-
+	print(is_on_wall_only())
+	if not $floorDetecte.is_colliding():
+		is_on_wall()
 	if speed != 0:
 		slip_amount = direction * TURN_SPEED * delta * (abs(speed) / MAX_SPEED) * 1000.0
 		lateral_velocity += right * slip_amount
 
-	# Accumule le drift uniquement si on tourne
+
 	if is_turning:
 		drift_power += abs(slip_amount) * 0.01
 	else:
-		# Quand on arrête de tourner, déclenche le boost si puissance suffisante
 		if drift_power >= DRIFT_THRESHOLD and not is_boosting:
 			is_boosting = true
 			boost_timer = BOOST_DURATION
 			drift_power = 0.0
 		else:
-			# Réduit la puissance si pas en train de tourner
+
 			drift_power = clamp(drift_power - DRIFT_DECAY * delta, 0.0, 100.0)
 
-	# Applique le boost
 	if is_boosting:
 		MAX_SPEED = 40
 		forward_velocity *= BOOST_MULTIPLIER
@@ -97,7 +100,7 @@ func _physics_process(delta: float) -> void:
 
 
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		velocity += gravity_direction.normalized() * gravity_strength * delta
 
 	# Gestion du saut
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
@@ -113,11 +116,34 @@ func _physics_process(delta: float) -> void:
 		new_basis.z = new_basis.x.cross(new_basis.y).normalized()
 		transform.basis = new_basis
 
+
+	if wall_ride:
+		var new_basis_wall = Basis()
+		new_basis_wall.y = wall.normalized()
+		new_basis_wall.z = -forward
+		new_basis_wall.x = new_basis_wall.y.cross(new_basis_wall.z).normalized()
+		new_basis_wall.z = new_basis_wall.x.cross(new_basis_wall.y).normalized()
+		transform.basis = new_basis_wall
+		
 	# Gestion du timer de boost
 	if is_boosting:
 		boost_timer -= delta
 		if boost_timer <= 0.0:
 			is_boosting = false
 
-	# Déplacement avec la physique
+	# Déplacement a vec la physique
 	move_and_slide()
+	print(wall_ride)
+	print(wall)
+
+
+func _on_area_3d_body_entered(body: Node3D):
+	print(body)
+	if body is Wall:
+		if not $floorDetecte.is_colliding():
+				wall_ride = true
+				wall = body
+				print("sui")
+func _on_area_3d_body_exited(body: Node3D):
+	if body is Wall:
+		wall_ride = false

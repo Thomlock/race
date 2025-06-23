@@ -73,3 +73,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("ConcavePolygonShape3D_m2mlj")
 
 [connection signal="body_entered" from="vide" to="." method="_on_vide_body_entered"]
+
+[editable path="wall"]

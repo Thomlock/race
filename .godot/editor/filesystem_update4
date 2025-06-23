@@ -1,8 +1,5 @@
+res://Code/character_body_3d.tscn
 res://Code/main.tscn
 res://Code/audio_manager.tscn
-res://Code/cam.tscn
-res://Code/character_body_3d.tscn
-res://Code/character_body_3d.gd
-res://mesh_instance_3d.gd
 res://Code/wall.tscn
-res://Code/mesh_instance_3d.gd
+res://Code/character_body_3d.gd
