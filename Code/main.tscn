@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://djxrcyq64efle"]
+[gd_scene load_steps=17 format=3 uid="uid://djxrcyq64efle"]
 
 [ext_resource type="Script" uid="uid://boi0p6utfvrnp" path="res://Code/main.gd" id="1_m2mlj"]
 [ext_resource type="Texture2D" uid="uid://h10j17mof76k" path="res://Texture/cadrillage.jpg" id="1_sxokv"]
 [ext_resource type="PackedScene" uid="uid://ssucypuf0dy" path="res://Code/character_body_3d.tscn" id="2_sxokv"]
 [ext_resource type="PackedScene" uid="uid://drx4cldihebxm" path="res://Code/wall.tscn" id="4_m2mlj"]
+[ext_resource type="Texture2D" uid="uid://euyeu6shut00" path="res://Texture/stone.jpg" id="5_fdhps"]
 
 [sub_resource type="Environment" id="Environment_asa22"]
 ambient_light_source = 2
@@ -28,6 +29,11 @@ points = PackedVector3Array(-100, 0, -100, -100, 0, 100, 100, 0, -100, 100, 0, 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fdhps"]
 size = Vector3(1, 0.01, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nlxfe"]
+albedo_color = Color(0.321728, 0.321728, 0.321728, 1)
+albedo_texture = ExtResource("5_fdhps")
+normal_scale = -9.07
 
 [sub_resource type="PrismMesh" id="PrismMesh_m2mlj"]
 size = Vector3(10, 3, 10)
@@ -68,15 +74,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 transform = Transform3D(1, 0, 0, 0, -1.09278e-06, -1, 0, 25, -4.37114e-08, -1.73267, 21.4618, 1.58031)
 
 [node name="wall" parent="." instance=ExtResource("4_m2mlj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -22.8356)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -8.1857)
+material_override = SubResource("StandardMaterial3D_nlxfe")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 1.64796, -22.5503)
+[node name="rampe" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.00373501, 0, 0.999993, 0, 1, 0, -0.999993, 0, 0.00373501, 9.30456, 1.64796, -8.4775)
 mesh = SubResource("PrismMesh_m2mlj")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D3"]
+[node name="StaticBody3D" type="StaticBody3D" parent="rampe"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D3/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="rampe/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_m2mlj")
+
+[node name="rampe2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.00373501, 0, 0.999993, 0.391901, 0.920006, -0.00146376, -0.92, 0.391904, 0.00343623, 9.30456, 2.95903, -8.4775)
+mesh = SubResource("PrismMesh_m2mlj")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="rampe2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="rampe2/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_m2mlj")
 
 [connection signal="body_entered" from="vide" to="." method="_on_vide_body_entered"]
