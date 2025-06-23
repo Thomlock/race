@@ -15,6 +15,7 @@ material = SubResource("StandardMaterial3D_cc3x3")
 
 [node name="player" type="CharacterBody3D"]
 floor_block_on_wall = false
+platform_wall_layers = 255
 script = ExtResource("1_cc3x3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -28,11 +29,20 @@ skeleton = NodePath("../..")
 [node name="Path3D" type="Path3D" parent="."]
 curve = SubResource("Curve3D_64l7o")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-
 [node name="Camera3D2" type="Camera3D" parent="."]
 script = ExtResource("2_cc3x3")
-target_path = NodePath("../Path3D/PathFollow3D")
+target_path = NodePath("../Path3D")
 
-[node name="RayCast3D" type="RayCast3D" parent="."]
+[node name="anglefloor" type="RayCast3D" parent="."]
 target_position = Vector3(0, -2, 0)
+
+[node name="countboost" type="Timer" parent="."]
+
+[node name="boostdur" type="Timer" parent="."]
+
+[node name="floorDetecte" type="RayCast3D" parent="."]
+target_position = Vector3(0, -1.5, 0)
+collision_mask = 3
+
+[connection signal="timeout" from="countboost" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="boostdur" to="." method="_on_boostdur_timeout"]

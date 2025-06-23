@@ -1,13 +1,8 @@
-res://Code/player.tscn
 res://Code/main.tscn
 res://Code/audio_manager.tscn
 res://Code/cam.tscn
 res://Code/character_body_3d.tscn
-res://camera_3d.gd
-res://Code/Global.gd
-res://Code/player.gd
-res://Code/camera_3d.tscn
-res://character_body_3d.gd
-res://Code/camera_3d_2.gd
 res://Code/character_body_3d.gd
-res://Code/main.gd
+res://mesh_instance_3d.gd
+res://Code/wall.tscn
+res://Code/mesh_instance_3d.gd

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://drx4cldihebxm"]
+
+[ext_resource type="Script" uid="uid://c7yutb62gdy3c" path="res://Code/mesh_instance_3d.gd" id="1_2ybrc"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1fu88"]
+size = Vector3(50, 10, 1)
+
+[node name="wall" type="MeshInstance3D"]
+layers = 1023
+mesh = SubResource("BoxMesh_1fu88")
+script = ExtResource("1_2ybrc")

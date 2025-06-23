@@ -1,6 +1,7 @@
-PathFollow3D
 RayCast3D
 MeshInstance3D
+Timer
+PathFollow3D
 Node3D
 CollisionShape3D
 Area3D
