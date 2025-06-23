@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://djxrcyq64efle"]
+[gd_scene load_steps=15 format=3 uid="uid://djxrcyq64efle"]
 
 [ext_resource type="Script" uid="uid://boi0p6utfvrnp" path="res://Code/main.gd" id="1_m2mlj"]
 [ext_resource type="Texture2D" uid="uid://h10j17mof76k" path="res://Texture/cadrillage.jpg" id="1_sxokv"]
@@ -29,8 +29,11 @@ points = PackedVector3Array(-100, 0, -100, -100, 0, 100, 100, 0, -100, 100, 0, 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_fdhps"]
 size = Vector3(1, 0.01, 1)
 
+[sub_resource type="PrismMesh" id="PrismMesh_m2mlj"]
+size = Vector3(10, 3, 10)
+
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_m2mlj"]
-data = PackedVector3Array(-25, 5, 0.5, 25, 5, 0.5, -25, -5, 0.5, 25, 5, 0.5, 25, -5, 0.5, -25, -5, 0.5, 25, 5, -0.5, -25, 5, -0.5, 25, -5, -0.5, -25, 5, -0.5, -25, -5, -0.5, 25, -5, -0.5, 25, 5, 0.5, 25, 5, -0.5, 25, -5, 0.5, 25, 5, -0.5, 25, -5, -0.5, 25, -5, 0.5, -25, 5, -0.5, -25, 5, 0.5, -25, -5, -0.5, -25, 5, 0.5, -25, -5, 0.5, -25, -5, -0.5, 25, 5, 0.5, -25, 5, 0.5, 25, 5, -0.5, -25, 5, 0.5, -25, 5, -0.5, 25, 5, -0.5, -25, -5, 0.5, 25, -5, 0.5, -25, -5, -0.5, 25, -5, 0.5, 25, -5, -0.5, -25, -5, -0.5)
+data = PackedVector3Array(0, 1.5, 5, 5, -1.5, 5, -5, -1.5, 5, 0, 1.5, -5, -5, -1.5, -5, 5, -1.5, -5, 0, 1.5, 5, 0, 1.5, -5, 5, -1.5, 5, 0, 1.5, -5, 5, -1.5, -5, 5, -1.5, 5, 0, 1.5, -5, 0, 1.5, 5, -5, -1.5, -5, 0, 1.5, 5, -5, -1.5, 5, -5, -1.5, -5, -5, -1.5, 5, 5, -1.5, 5, -5, -1.5, -5, 5, -1.5, 5, 5, -1.5, -5, -5, -1.5, -5)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_m2mlj")
@@ -65,13 +68,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 transform = Transform3D(1, 0, 0, 0, -1.09278e-06, -1, 0, 25, -4.37114e-08, -1.73267, 21.4618, 1.58031)
 
 [node name="wall" parent="." instance=ExtResource("4_m2mlj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -22.8356)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="wall"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 1.64796, -22.5503)
+mesh = SubResource("PrismMesh_m2mlj")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="wall/StaticBody3D"]
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D3/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_m2mlj")
 
 [connection signal="body_entered" from="vide" to="." method="_on_vide_body_entered"]
-
-[editable path="wall"]

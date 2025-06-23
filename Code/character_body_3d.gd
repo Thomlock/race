@@ -4,10 +4,10 @@ class_name Player
 
 
 # Configuration générale
-const ACCELERATION = 10.0
-const DECELERATION = 8.0
+const ACCELERATION = 20.0
+const DECELERATION = 16.0
 const TURN_SPEED = 2.0
-const MAX_REVERSE_SPEED = -10.0
+const MAX_REVERSE_SPEED = -20.0
 
 const JUMP_VELOCITY = 5
 const SLIP_FACTOR = 0.05
@@ -15,7 +15,7 @@ const SLIP_FACTOR = 0.05
 const DRIFT_THRESHOLD = 20.0
 const DRIFT_DECAY = 10.0    
 
-var MAX_SPEED = 20.0
+var MAX_SPEED = 30.0
 
 const BOOST_DURATION = 1.0
 const BOOST_MULTIPLIER = 2
@@ -27,8 +27,9 @@ var is_boosting = false
 var boost_timer = 0.0
 var drift_power = 0.0
 var gravity_direction = Vector3(0, -1, 0)
-var gravity_strength = 2
-var wall = null
+var gravity_strength = 8.8
+var wall_normal = null
+
 
 var wall_ride = false
 
@@ -69,11 +70,11 @@ func _physics_process(delta: float) -> void:
 
 	lateral_velocity *= SLIP_FACTOR
 	var slip_amount = 0.0
-	print(is_on_wall_only())
+	#print(is_on_wall_only())
 	if not $floorDetecte.is_colliding():
 		is_on_wall()
 	if speed != 0:
-		slip_amount = direction * TURN_SPEED * delta * (abs(speed) / MAX_SPEED) * 1000.0
+		slip_amount = direction * TURN_SPEED * delta * (abs(speed) / MAX_SPEED) * sqrt(speed) * 100.0
 		lateral_velocity += right * slip_amount
 
 
@@ -89,10 +90,10 @@ func _physics_process(delta: float) -> void:
 			drift_power = clamp(drift_power - DRIFT_DECAY * delta, 0.0, 100.0)
 
 	if is_boosting:
-		MAX_SPEED = 40
+		MAX_SPEED = 50
 		forward_velocity *= BOOST_MULTIPLIER
 	else:
-		MAX_SPEED = 20
+		MAX_SPEED = 30
 
 	# Application de la vélocité totale
 	velocity.x = forward_velocity.x + lateral_velocity.x
@@ -109,23 +110,9 @@ func _physics_process(delta: float) -> void:
 	# Alignement au sol (raycast)
 	if $anglefloor.is_colliding():
 		var normal = $anglefloor.get_collision_normal()
-		var new_basis = Basis()
-		new_basis.y = normal.normalized()
-		new_basis.z = -forward
-		new_basis.x = new_basis.y.cross(new_basis.z).normalized()
-		new_basis.z = new_basis.x.cross(new_basis.y).normalized()
-		transform.basis = new_basis
-
-
-	if wall_ride:
-		var new_basis_wall = Basis()
-		new_basis_wall.y = wall.normalized()
-		new_basis_wall.z = -forward
-		new_basis_wall.x = new_basis_wall.y.cross(new_basis_wall.z).normalized()
-		new_basis_wall.z = new_basis_wall.x.cross(new_basis_wall.y).normalized()
-		transform.basis = new_basis_wall
-		
-	# Gestion du timer de boost
+		forward = -transform.basis.z.normalized()
+		align_to_surface(normal, forward)
+	
 	if is_boosting:
 		boost_timer -= delta
 		if boost_timer <= 0.0:
@@ -133,17 +120,24 @@ func _physics_process(delta: float) -> void:
 
 	# Déplacement a vec la physique
 	move_and_slide()
-	print(wall_ride)
-	print(wall)
-
-
-func _on_area_3d_body_entered(body: Node3D):
-	print(body)
-	if body is Wall:
-		if not $floorDetecte.is_colliding():
-				wall_ride = true
-				wall = body
-				print("sui")
-func _on_area_3d_body_exited(body: Node3D):
-	if body is Wall:
+	if is_on_wall() and not $floorDetecte.is_colliding():
+		if get_slide_collision_count() > 0:
+			print(get_last_slide_collision())
+			var wall_normal = get_last_slide_collision().get_normal()
+			gravity_direction = -wall_normal
+			wall_ride = true
+			velocity.y = velocity.y * 0
+			
+	else:
+		gravity_direction = Vector3(0, -1, 0)
 		wall_ride = false
+		align_to_surface(Vector3.UP, -transform.basis.z)
+		
+		
+func align_to_surface(normal: Vector3, forward_dir: Vector3):
+	var new_basis = Basis()
+	new_basis.y = normal.normalized()
+	new_basis.z = -forward_dir.normalized()
+	new_basis.x = new_basis.y.cross(new_basis.z).normalized()
+	new_basis.z = new_basis.x.cross(new_basis.y).normalized()
+	transform.basis = new_basis

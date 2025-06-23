@@ -1,5 +1,5 @@
 res://Code/character_body_3d.tscn
+res://Code/character_body_3d.gd
 res://Code/main.tscn
 res://Code/audio_manager.tscn
 res://Code/wall.tscn
-res://Code/character_body_3d.gd
